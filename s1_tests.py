@@ -39,7 +39,7 @@ class CryptoPalsTestCase(unittest.TestCase):
 
     def test_english_like(self):
         """
-        The english string should score higher than the gibberish one--this
+        The english string should score lower than the gibberish one--this
         test is for my own verification and does not comprise any challenge on
         its own
         """
