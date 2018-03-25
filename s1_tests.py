@@ -68,6 +68,7 @@ class CryptoPalsTestCase(unittest.TestCase):
 
     def test_set_1_challenge_4(self):
         decrypted, _, _ = s1c4.set_1_challenge_4('challenge-data/s1c4.txt')
+        # SPOILER
         self.assertEqual(decrypted, b'Now that the party is jumping\n')
 
 
