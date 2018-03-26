@@ -60,13 +60,15 @@ class CryptoPalsTestCase(unittest.TestCase):
         )
 
     def test_single_character_decryption(self):
-        decrypted, _, _ = s1c3.find_single_character_decryption_key(
+        "https://cryptopals.com/sets/1/challenges/3"
+        decrypted, key, _ = s1c3.find_single_character_decryption_key(
             s1c1.hex_to_64(
                 '1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a3'
                 '93b3736')
         )
         # SPOILER
         self.assertEqual(decrypted, b"Cooking MC's like a pound of bacon")
+        self.assertEqual(key, 'X')
 
     def test_set_1_challenge_4(self):
         decrypted, _, _ = s1c4.set_1_challenge_4('challenge-data/s1c4.txt')
