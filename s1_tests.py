@@ -15,6 +15,7 @@ import s1c2
 import s1c3
 import s1c4
 import s1c5
+import s1c6
 
 
 class CryptoPalsTestCase(unittest.TestCase):
@@ -87,6 +88,15 @@ class CryptoPalsTestCase(unittest.TestCase):
             '65286326302e27282f'
         )
 
+    def test_hamming_distance(self):
+        "Item 2 from http://cryptopals.com/sets/1/challenges/6"
+        self.assertEqual(
+            s1c6.hamming_distance(
+                b'this is a test',
+                b'wokka wokka!!!'
+            ),
+            37
+        )
 
 if __name__ == '__main__':
     unittest.main()
