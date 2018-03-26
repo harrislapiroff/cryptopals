@@ -14,6 +14,7 @@ import s1c1
 import s1c2
 import s1c3
 import s1c4
+import s1c5
 
 
 class CryptoPalsTestCase(unittest.TestCase):
@@ -70,6 +71,21 @@ class CryptoPalsTestCase(unittest.TestCase):
         decrypted, _, _ = s1c4.set_1_challenge_4('challenge-data/s1c4.txt')
         # SPOILER
         self.assertEqual(decrypted, b'Now that the party is jumping\n')
+
+    def test_repeating_key_xor(self):
+        "http://cryptopals.com/sets/1/challenges/5"
+
+        xored = s1c5.repeating_key_xor(
+            b'Burning \'em, if you ain\'t quick and nimble\n'
+            b'I go crazy when I hear a cymbal',
+            b'ICE'
+        )
+        self.assertEqual(
+            xored.hex(),
+            '0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d63343c2a2622632'
+            '4272765272a282b2f20430a652e2c652a3124333a653e2b2027630c692b202831'
+            '65286326302e27282f'
+        )
 
 
 if __name__ == '__main__':
