@@ -1,6 +1,5 @@
 from typing import Tuple
 
-from s1c1 import hex_to_64
 from s1c3 import find_single_character_decryption_key
 
 
@@ -18,7 +17,7 @@ def set_1_challenge_4(filename: str) -> Tuple[bytes, str, float]:
             # Get best possible decryption for this line
             decrypted_lines.append(
                 find_single_character_decryption_key(
-                    hex_to_64(line.rstrip())
+                    bytes.fromhex(line.rstrip())
                 )
             )
     # Now find the best result of our best results

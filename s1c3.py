@@ -1,5 +1,3 @@
-import base64
-
 from collections import defaultdict
 
 from typing import Tuple
@@ -36,7 +34,7 @@ ENGLISH_CHARACTER_FREQUENCY = {
 
 
 def single_character_xor(b: bytes, i: int) -> bytes:
-    xored = bytes(x ^ i for x in base64.decodebytes(b))
+    xored = bytes(x ^ i for x in b)
     return xored
 
 
