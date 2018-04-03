@@ -21,6 +21,7 @@ import s1c6
 class CryptoPalsTestCase(unittest.TestCase):
     def test_hex_to_64(self):
         "https://cryptopals.com/sets/1/challenges/1"
+
         self.assertEqual(
             s1c1.hex_to_64(
                 '49276d206b696c6c696e6720796f757220627261696e206c696b652061207'
@@ -31,6 +32,7 @@ class CryptoPalsTestCase(unittest.TestCase):
 
     def test_xor(self):
         "https://cryptopals.com/sets/1/challenges/2"
+
         self.assertEqual(
             s1c2.xor(
                 s1c1.hex_to_64('1c0111001f010100061a024b53535009181c'),
@@ -61,6 +63,7 @@ class CryptoPalsTestCase(unittest.TestCase):
 
     def test_single_character_decryption(self):
         "https://cryptopals.com/sets/1/challenges/3"
+
         decrypted, key, _ = s1c3.find_single_character_decryption_key(
             bytes.fromhex(
                 '1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a3'
@@ -72,6 +75,8 @@ class CryptoPalsTestCase(unittest.TestCase):
         self.assertEqual(key, 'X')
 
     def test_set_1_challenge_4(self):
+        "https://cryptopals.com/sets/1/challenges/4"
+
         decrypted, _, _ = s1c4.set_1_challenge_4('challenge-data/s1c4.txt')
         # SPOILER
         self.assertEqual(decrypted, b'Now that the party is jumping\n')
@@ -93,6 +98,7 @@ class CryptoPalsTestCase(unittest.TestCase):
 
     def test_hamming_distance(self):
         "Item 2 from http://cryptopals.com/sets/1/challenges/6"
+
         self.assertEqual(
             s1c6.hamming_distance(
                 b'this is a test',
@@ -102,8 +108,11 @@ class CryptoPalsTestCase(unittest.TestCase):
         )
 
     def test_likely_key_sizes(self):
+        "Item 4 from http://cryptopals.com/sets/1/challenges/6"
+
         with open('challenge-data/s1c6.txt', 'rb') as file:
             key_sizes = s1c6.likely_keysizes(file.read())
+
         # SPOILER
         self.assertSequenceEqual(
             key_sizes,

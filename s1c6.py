@@ -64,10 +64,13 @@ def decrypt_by_repeating_key_with_size(
 
     # Honestly I don't fully understand why this works. Seems like functional
     # magic to me.
-    # See: https://stackoverflow.com/questions/9475241/split-string-every-nth-character#comment75857079_9475538
+    # See:
+    # https://stackoverflow.com/questions/9475241/split-string-every-nth-character#comment75857079_9475538
     blocks_as_bytes = list(zip_longest(*[iter(body)] * size, fillvalue=b''))
-    # Transpose the blocks so that we can get the first characters from each block,
-    # the second characters from each block, the third characters from each block, etc.
+
+    # Transpose the blocks so that we can get the first characters from each
+    # block, the second characters from each block, the third characters
+    # from each block, etc.
     columns = list(zip(*blocks_as_bytes))
     decryption_key = ''
     for column in columns:
