@@ -56,7 +56,7 @@ def decrypt_by_repeating_key_with_size(
     size: int
 ) -> Tuple[bytes, bytes]:
     """
-    Given a base64 encoded body and a specific key size, attempt to deduce
+    Given a bytes and a specific key size, attempt to deduce
     the key used with repeating key encryption
     """
 
@@ -93,7 +93,7 @@ def decrypt_by_repeating_key(
     body: bytes
 ):
     """
-    Given a body as bytes, attempt to determine the repeating key
+    Given a bytes, attempt to determine the repeating key
     that it was encrypted with and decrypt it
     """
 
