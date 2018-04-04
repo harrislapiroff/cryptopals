@@ -1,12 +1,10 @@
 import base64
-import textwrap
 from itertools import zip_longest
 
 from typing import Tuple, List
 
 from s1c3 import (
     find_single_character_decryption_key,
-    like_english_score,
 )
 
 
@@ -66,12 +64,14 @@ def decrypt_by_repeating_key_with_size(
     # magic to me.
     # See:
     # https://stackoverflow.com/questions/9475241/split-string-every-nth-character#comment75857079_9475538
-    blocks_as_bytes = list(zip_longest(*[iter(body)] * size, fillvalue=0))
+    #
+    # Also, should I really be filling values with 0 if there's a remainder????
+    blocks_as_ints = list(zip_longest(*[iter(body)] * size, fillvalue=0))
 
     # Transpose the blocks so that we can get the first characters from each
     # block, the second characters from each block, the third characters
     # from each block, etc.
-    columns = list(zip(*blocks_as_bytes))
+    columns = list(zip(*blocks_as_ints))
     decryption_key = b''
     decrypted_columns = []
     for column in columns:
@@ -102,3 +102,4 @@ def decrypt_by_repeating_key(
     for key_size, _ in ranked_key_sizes[0:20]:
         decrypted, key = decrypt_by_repeating_key_with_size(body, key_size)
         print(decrypted)
+        print(key)
