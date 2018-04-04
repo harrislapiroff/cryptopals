@@ -101,5 +101,6 @@ def decrypt_by_repeating_key(
 
     for key_size, _ in ranked_key_sizes[0:20]:
         decrypted, key = decrypt_by_repeating_key_with_size(body, key_size)
+        # None of these results look like english and I don't know why!
         print(decrypted)
         print(key)
