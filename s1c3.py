@@ -46,7 +46,7 @@ def like_english_score(b: bytes) -> float:
     Lower scores are more English-like
     """
 
-    counts = defaultdict(lambda: 0)
+    counts = defaultdict(lambda: 0)  # type: defaultdict
     total_chars = 0
     for x in b:
         key = chr(x).lower()

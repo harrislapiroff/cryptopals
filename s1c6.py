@@ -25,7 +25,7 @@ def likely_keysizes(
     body: bytes,
     min_key_size=2,
     max_key_size=40
-) -> List[Tuple[int, int]]:
+) -> List[Tuple[int, float]]:
     """
     Given a base64 encoded body, make a list of key sizes in order by
     calculating the hamming distance between the first two strings of that key
@@ -56,7 +56,7 @@ def likely_keysizes(
 def decrypt_by_repeating_key_with_size(
     body: bytes,
     size: int
-):
+) -> Tuple[bytes, bytes]:
     """
     Given a base64 encoded body and a specific key size, attempt to deduce
     the key used with repeating key encryption
@@ -66,18 +66,27 @@ def decrypt_by_repeating_key_with_size(
     # magic to me.
     # See:
     # https://stackoverflow.com/questions/9475241/split-string-every-nth-character#comment75857079_9475538
-    blocks_as_bytes = list(zip_longest(*[iter(body)] * size, fillvalue=b''))
+    blocks_as_bytes = list(zip_longest(*[iter(body)] * size, fillvalue=0))
 
     # Transpose the blocks so that we can get the first characters from each
     # block, the second characters from each block, the third characters
     # from each block, etc.
     columns = list(zip(*blocks_as_bytes))
-    decryption_key = ''
+    decryption_key = b''
+    decrypted_columns = []
     for column in columns:
-        _, column_key, _ = find_single_character_decryption_key(bytes(column))
+        column_as_bytes = bytes(column)
+        decrypted_column, column_key, _ = find_single_character_decryption_key(
+            column_as_bytes
+        )
         decryption_key = decryption_key + column_key
+        decrypted_columns.append(list(decrypted_column))
 
-    return decryption_key
+    # Transpose the decrypted columns back into blocks
+    decrypted_blocks = list(zip(*decrypted_columns))
+    decrypted_string = b''.join(bytes(x) for x in decrypted_blocks)
+
+    return decrypted_string, decryption_key
 
 
 def decrypt_by_repeating_key(
@@ -90,5 +99,6 @@ def decrypt_by_repeating_key(
 
     ranked_key_sizes = likely_keysizes(body)
 
-    for key_size, _ in ranked_key_sizes[0:3]:
-        decrypt_by_repeating_key_with_size(body, key_size)
+    for key_size, _ in ranked_key_sizes[0:20]:
+        decrypted, key = decrypt_by_repeating_key_with_size(body, key_size)
+        print(decrypted)

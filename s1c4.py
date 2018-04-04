@@ -3,7 +3,7 @@ from typing import Tuple
 from s1c3 import find_single_character_decryption_key
 
 
-def set_1_challenge_4(filename: str) -> Tuple[bytes, str, float]:
+def set_1_challenge_4(filename: str) -> Tuple[bytes, bytes, float]:
     """
     This function is written specifically to the challenge. Given a file name,
     read all the rows from that file and identify one of those rows that is
