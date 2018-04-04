@@ -93,7 +93,7 @@ def decrypt_by_repeating_key(
     body: bytes
 ):
     """
-    Given a base64 encoded body, attempt to determine the repeating key
+    Given a body as bytes, attempt to determine the repeating key
     that it was encrypted with and decrypt it
     """
 
