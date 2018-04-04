@@ -8,6 +8,7 @@ English) and the tests were written after the correct solution (e.g., the
 English string to be identified) was determined.
 """
 
+import base64
 import unittest
 
 import s1c1
@@ -72,7 +73,7 @@ class CryptoPalsTestCase(unittest.TestCase):
         )
         # SPOILER
         self.assertEqual(decrypted, b"Cooking MC's like a pound of bacon")
-        self.assertEqual(key, 'X')
+        self.assertEqual(key, b'X')
 
     def test_set_1_challenge_4(self):
         "https://cryptopals.com/sets/1/challenges/4"
@@ -136,7 +137,8 @@ class CryptoPalsTestCase(unittest.TestCase):
 
     def test_s1c6(self):
         with open('challenge-data/s1c6.txt', 'rb') as file:
-            decrypted = s1c6.decrypt_by_repeating_key(file.read())
+            input_bytes = base64.decodebytes(file.read())
+            decrypted = s1c6.decrypt_by_repeating_key(input_bytes)
 
 if __name__ == '__main__':
     unittest.main()

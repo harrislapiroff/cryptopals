@@ -72,7 +72,7 @@ def like_english_score(b: bytes) -> float:
     return score
 
 
-def find_single_character_decryption_key(b: bytes) -> Tuple[bytes, str, float]:
+def find_single_character_decryption_key(b: bytes) -> Tuple[bytes, bytes, float]:
     """
     Provided a bytestring, attempt decryption with single-character keys,
     assign them an english-likeness score, and return the lowest scoring string
@@ -84,7 +84,7 @@ def find_single_character_decryption_key(b: bytes) -> Tuple[bytes, str, float]:
     for x in range(0, 255):
         decrypted = single_character_xor(b, x)
         possibilities.append(
-            (decrypted, chr(x), like_english_score(decrypted))
+            (decrypted, bytes([x]), like_english_score(decrypted))
         )
 
     # Sort the list in order of score and return the first item, which is the
