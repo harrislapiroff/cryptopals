@@ -9,6 +9,9 @@ from s1c3 import (
 
 
 def hamming_distance(b1: bytes, b2: bytes) -> int:
+    if len(b1) != len(b2):
+        raise ValueError('Provided arguments must be the same length')
+
     bitstring1 = ''.join(format(byte, 'b').rjust(8, '0') for byte in b1)
     bitstring2 = ''.join(format(byte, 'b').rjust(8, '0') for byte in b2)
 
@@ -17,6 +20,20 @@ def hamming_distance(b1: bytes, b2: bytes) -> int:
         count += 1 if bit1 != bit2 else 0
 
     return count
+
+
+def bytes_to_blocks(n: int, body: bytes) -> List[Tuple[int, ...]]:
+    """
+    Break a bytes into a lists of byte integers of size n
+    """
+
+    # Honestly I don't fully understand why this works. Seems like functional
+    # magic to me.
+    # See:
+    # https://stackoverflow.com/questions/9475241/split-string-every-nth-character#comment75857079_9475538
+    #
+    # Also, should I really be filling values with 0 if there's a remainder????
+    return list(zip_longest(*[iter(body)] * n, fillvalue=0))
 
 
 def likely_keysizes(
@@ -40,14 +57,27 @@ def likely_keysizes(
 
     attempted_key_sizes = []
     for key_size in range(min_key_size, max_key_size + 1):
-        first_string = decoded[0:key_size]
-        second_string = decoded[key_size:key_size * 2]
+        blocks = bytes_to_blocks(key_size, body)
+        # Do ~160 characters worth of comparisons
+        num_blocks = 160 // key_size
+        even_numbers = (x * 2 for x in range(0, num_blocks // 2))
+        actual_char_count = (num_blocks // 2) * key_size * 2
+
+        distance = 0
+        for block_index in even_numbers:
+            block_1 = bytes(blocks[block_index])
+            block_2 = bytes(blocks[block_index + 1])
+            distance += hamming_distance(block_1, block_2)
+
+        # Store this key size alongsize its average hamming distance
         attempted_key_sizes.append((
             key_size,
-            hamming_distance(first_string, second_string) / key_size,
+            distance / actual_char_count,
         ))
 
+    # Sort all attempted key sizes in order of smallest hamming distance
     attempted_key_sizes.sort(key=lambda x: x[1])
+
     return attempted_key_sizes
 
 
@@ -60,13 +90,7 @@ def decrypt_by_repeating_key_with_size(
     the key used with repeating key encryption
     """
 
-    # Honestly I don't fully understand why this works. Seems like functional
-    # magic to me.
-    # See:
-    # https://stackoverflow.com/questions/9475241/split-string-every-nth-character#comment75857079_9475538
-    #
-    # Also, should I really be filling values with 0 if there's a remainder????
-    blocks_as_ints = list(zip_longest(*[iter(body)] * size, fillvalue=0))
+    blocks_as_ints = bytes_to_blocks(size, body)
 
     # Transpose the blocks so that we can get the first characters from each
     # block, the second characters from each block, the third characters

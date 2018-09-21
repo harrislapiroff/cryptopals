@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 mypy = "*"
+"flake8" = "*"
+ipdb = "*"
 
 [dev-packages]
 
