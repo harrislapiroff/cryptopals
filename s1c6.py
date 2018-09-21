@@ -5,6 +5,7 @@ from typing import Tuple, List
 
 from s1c3 import (
     find_single_character_decryption_key,
+    like_english_score,
 )
 
 
@@ -46,7 +47,7 @@ def likely_keysizes(
     calculating the hamming distance between the first two strings of that key
     size in the body
 
-    Returns a tuple of two-tuples of the format
+    Returns a list of two-tuples of the format
     (key size, normalized edit distance), sorted with the lowest edit distances
     at the top
 
@@ -96,6 +97,7 @@ def decrypt_by_repeating_key_with_size(
     # block, the second characters from each block, the third characters
     # from each block, etc.
     columns = list(zip(*blocks_as_ints))
+
     decryption_key = b''
     decrypted_columns = []
     for column in columns:
@@ -123,8 +125,15 @@ def decrypt_by_repeating_key(
 
     ranked_key_sizes = likely_keysizes(body)
 
-    for key_size, _ in ranked_key_sizes[0:20]:
+    # Take the top 5 key sizes and decrypt using them
+    top_5 = []
+    for key_size, _ in ranked_key_sizes[0:5]:
         decrypted, key = decrypt_by_repeating_key_with_size(body, key_size)
-        # None of these results look like english and I don't know why!
-        print(decrypted)
-        print(key)
+        english_likeness = like_english_score(decrypted)
+        top_5.append((decrypted, key, english_likeness,))
+
+    # Sort by english-likeness and return the most english-like result
+    top_5.sort(key=lambda x: x[2])
+
+    # Returns: decrypted, key
+    return top_5[0][0], top_5[0][1]
