@@ -43,7 +43,7 @@ def likely_keysizes(
     max_key_size=40
 ) -> List[Tuple[int, float]]:
     """
-    Given a base64 encoded body, make a list of key sizes in order by
+    Given a body of bytes, make a list of key sizes in order by
     calculating the hamming distance between the first two strings of that key
     size in the body
 
@@ -53,8 +53,6 @@ def likely_keysizes(
 
     (See http://cryptopals.com/sets/1/challenges/6 step 3)
     """
-
-    decoded = base64.decodebytes(body)
 
     attempted_key_sizes = []
     for key_size in range(min_key_size, max_key_size + 1):
